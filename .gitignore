@@ -1,0 +1,201 @@
+# Created by https://www.toptal.com/developers/gitignore/api/python,venv
+# Edit at https://www.toptal.com/developers/gitignore?templates=python,venv
+
+### Python ###
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+.pybuilder/
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pdm
+.pdm.toml
+
+# PEP 582
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+nlp_venv/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+### Python Patch ###
+poetry.toml
+
+# ruff
+.ruff_cache/
+
+# LSP config files
+pyrightconfig.json
+
+### venv ###
+[Bb]in
+[Ii]nclude
+[Ll]ib
+[Ll]ib64
+[Ll]ocal
+[Ss]cripts
+pyvenv.cfg
+pip-selfcheck.json
+data/
+*.db
+*.png
+/cachedir
+/models
+*.model
+*.vocab
+*.txt
+*.gz
+*.xml
+*.npy
+gnews_model_wv
+
+### Additional Custom Ignores (OpinosisDataset) ###
+OpinosisDataset1.0
+.OpinosisDataset1.0
+OpinosisDataset1.0/
+/OpinosisDataset1.0
+
+
+# 대용량 TSV 파일 직접 차단
+gnews_model_wv_tensor.tsv
+gnews_model_wv_metadata.tsv
+*.tsv
+
+07_seq2seq/eng_kor.txt
+07_seq2seq/glove.6B.100d.txt
+07_seq2seq/train_log.csv
+
+*.keras
+decoder_teacher_forcing_model.keras
+
+*.csv
+
+# 가상환경 및 파이썬 캐시
+nlp_venv/
+__pycache__/
+.ipynb_checkpoints/
+
+# 대용량 모델 파일 및 체크포인트 (nsmc_model 폴더 통째로 제외 등)
+nsmc_model/
+*.keras
+*.bin
+*.pt
+
+# 환경 변수 설정 파일
+.env
+
+llm_venv/
+*.mp3
