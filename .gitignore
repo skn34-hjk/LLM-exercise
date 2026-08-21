@@ -201,3 +201,5 @@ llm_venv/
 *.mp3
 
 03_openai_api/fine_food_reviews_1k.csv
+
+*.jsonl
