@@ -204,3 +204,7 @@ llm_venv/
 
 *.jsonl
 *.pdf
+
+chroma_db
+chroma_db/
+db/
