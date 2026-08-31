@@ -51,10 +51,10 @@ def describe_dish_flavor(query: dict):
     temp = []
     # image_urls가 있는 경우 이미지 URL들을 메시지 블록으로 추가
     if query.get('image_urls'):
-        temp += [{'image_url': image_url} for image_url in query.get('image_urls')]
+        temp += [{"image_url": image_url} for image_url in query.get('image_urls')]
     # text가 있는 경우 메시지 블록으로 추가
     if query.get('text'):
-        temp += [{'text': query.get('text')}]
+        temp += [{"text": query.get('text')}]
 
     # HumanMessagePromptTemplate : 멀티모달 블록형태의 값을 human 메시지로 프롬프트에 추가
     prompt += HumanMessagePromptTemplate.from_template(temp)
@@ -66,22 +66,25 @@ def describe_dish_flavor(query: dict):
 
     return chain  # 체인 결과 반환
 
+# 요리 풍미 설명을 받아서 Pinecone에서 유사한 와인리뷰를 찾아 반환하는 함수
 def search_wine_review(query):
 
     embeddings = OpenAIEmbeddings(model='text-embedding-3-small')  # 1536차원 임베딩 모델
 
+    # PineconeVectorStore index 연결
     vector_store = PineconeVectorStore(
-        index_name = 'winemag-data',  # 저장할 index명
-        embedding = embeddings  # 질의문 임베딩에 사용할 모델
+        index_name = 'winemag-data',  # 검색할 index명
+        embedding = embeddings,  # 질의문 임베딩에 사용할 모델
     )
 
-    docs = vector_store.similarity_search(query, k=5)  # 가장 유사한 Documents 5개를 뽑아옴
+    docs = vector_store.similarity_search(query, k=5)
 
-    return{
+    return {
         'dish_flavor': query,
         'wine_reviews': '\n\n'.join(doc.page_content for doc in docs)
     }
 
+# 와인 추천 체인 : 요리 풍미 + 검색된 와인 리뷰를 바탕으로 페어링 추천
 def recommend_wines(query):
     prompt = ChatPromptTemplate.from_messages([
         ('system', '''
@@ -103,7 +106,7 @@ def recommend_wines(query):
 **예시 (Examples):**
 ... (생략) ...
 '''),
-                # 입력 변수(dish_flavor, wine_reviews) 기반 요청
+				# 입력 변수(dish_flavor, wine_reviews) 기반 요청
         ('human', '''
 와인페이링 추천에 있어 아래 제시된 요리와 풍미, 와인리뷰만을 기초하여 답변해주세요.
 
@@ -121,3 +124,16 @@ def recommend_wines(query):
     chain = prompt | llm | output_parser
 
     return chain  # 체인 결과 반환
+
+# 요리 묘사 -> 와인 검색 -> 추천해주는 통합 스트리밍 체인
+def ai_wine_sommelier_rag(query):
+    # {'text': ..., 'image_urls': ...} -> 요리 풍미(텍스트)
+    dish_flavor_chain = RunnableLambda(describe_dish_flavor)
+    # 풍미 텍스트 -> 유사한 와인 리뷰 검색 -> {'dish_flavor': ..., 'wine_reviews': ...}
+    search_wine_review_chain = RunnableLambda(search_wine_review)
+    # {'dish_flavor': ..., 'wine_reviews': ...} -> 최종 와인 페어링 추천
+    recommend_wines_chain = RunnableLambda(recommend_wines)
+
+    chain = dish_flavor_chain | search_wine_review_chain | recommend_wines_chain
+
+    return chain.stream(query)
